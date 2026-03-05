@@ -36,12 +36,12 @@ go build .
 
 Required parameters only. Uses DefaultAzureCredential. Mirrors all containers in database.
 
-```powershell
-go run . `
-  --workspace "<My Fabric Workspace>" `
-  --connection "<Fabric Connection Name>" `
-  --cosmos-endpoint "https://<cosmos-account-name>.documents.azure.com:443/" `
-  --database "<MyCosmosDatabase>" `
+```bash
+go run . \
+  --workspace "<My Fabric Workspace>" \
+  --connection "<Fabric Connection Name>" \
+  --cosmos-endpoint "https://<cosmos-account-name>.documents.azure.com:443/" \
+  --database "<MyCosmosDatabase>" \
   --mirror-name "<FabricMirrorArtifactName>"
 ```
 
@@ -56,13 +56,13 @@ go run . `
 Forces a browser sign-in window. Use when DefaultAzureCredential isn't
 picking up the right account or you haven't run `az login`.
 
-```powershell
-go run . `
-  --interactive `
-  --workspace "<My Fabric Workspace>" `
-  --connection "<Fabric Connection Name>" `
-  --cosmos-endpoint "https://<cosmos-account-name>.documents.azure.com:443/" `
-  --database "<MyCosmosDatabase>" `
+```bash
+go run . \
+  --interactive \
+  --workspace "<My Fabric Workspace>" \
+  --connection "<Fabric Connection Name>" \
+  --cosmos-endpoint "https://<cosmos-account-name>.documents.azure.com:443/" \
+  --database "<MyCosmosDatabase>" \
   --mirror-name "<FabricMirrorArtifactName>"
 ```
 
@@ -70,40 +70,40 @@ go run . `
 
 Only mirror specific containers. Create Mirror database artifact in specific folder in Workspace (folder must exist)
 
-```powershell
-go run . `
-  --workspace "<My Fabric Workspace>" `
-  --connection "<Fabric Connection Name>" `
-  --cosmos-endpoint "https://<cosmos-account-name>.documents.azure.com:443/" `
-  --database "<MyCosmosDatabase>" `
-  --containers "<MyContainer1>, <MyContainer2>" `
-  --mirror-name "<Database Mirror Artifact Name>" `
+```bash
+go run . \
+  --workspace "<My Fabric Workspace>" \
+  --connection "<Fabric Connection Name>" \
+  --cosmos-endpoint "https://<cosmos-account-name>.documents.azure.com:443/" \
+  --database "<MyCosmosDatabase>" \
+  --containers "<MyContainer1>, <MyContainer2>" \
+  --mirror-name "<Database Mirror Artifact Name>" \
   --folder "Mirroring"
 ```
 
 ### Example 3: Auto-discover new containers
 
-```powershell
-go run . `
-  --workspace "<My Fabric Workspace>" `
-  --connection "<Fabric Connection Name>" `
-  --cosmos-endpoint "https://<cosmos-account-name>.documents.azure.com:443/" `
-  --database "<MyCosmosDatabase>" `
-  --mirror-name "<Database Mirror Artifact Name>" `
+```bash
+go run . \
+  --workspace "<My Fabric Workspace>" \
+  --connection "<Fabric Connection Name>" \
+  --cosmos-endpoint "https://<cosmos-account-name>.documents.azure.com:443/" \
+  --database "<MyCosmosDatabase>" \
+  --mirror-name "<Database Mirror Artifact Name>" \
   --auto-discover
 ```
 
 ### Example 4: Specific tenant and app registration
 
-```powershell
-go run . `
-  --interactive `
-  --tenant "YOUR_TENANT_ID" `
-  --client "YOUR_CLIENT_ID" `
-  --workspace "<My Fabric Workspace>" `
-  --connection "<Fabric Connection Name>" `
-  --cosmos-endpoint "https://<cosmos-account-name>.documents.azure.com:443/" `
-  --database "<MyCosmosDatabase>" `
+```bash
+go run . \
+  --interactive \
+  --tenant "YOUR_TENANT_ID" \
+  --client "YOUR_CLIENT_ID" \
+  --workspace "<My Fabric Workspace>" \
+  --connection "<Fabric Connection Name>" \
+  --cosmos-endpoint "https://<cosmos-account-name>.documents.azure.com:443/" \
+  --database "<MyCosmosDatabase>" \
   --mirror-name "<Database Mirror Artifact Name>"
 ```
 
@@ -112,13 +112,13 @@ go run . `
 When running on Azure-hosted compute with a user-assigned managed identity,
 provide the identity's client ID. No browser prompt is needed.
 
-```powershell
-go run . `
-  --managed-identity-client-id "YOUR_MANAGED_IDENTITY_CLIENT_ID" `
-  --workspace "<My Fabric Workspace>" `
-  --connection "<Fabric Connection Name>" `
-  --cosmos-endpoint "https://<cosmos-account-name>.documents.azure.com:443/" `
-  --database "<MyCosmosDatabase>" `
+```bash
+go run . \
+  --managed-identity-client-id "YOUR_MANAGED_IDENTITY_CLIENT_ID" \
+  --workspace "<My Fabric Workspace>" \
+  --connection "<Fabric Connection Name>" \
+  --cosmos-endpoint "https://<cosmos-account-name>.documents.azure.com:443/" \
+  --database "<MyCosmosDatabase>" \
   --mirror-name "<Database Mirror Artifact Name>"
 ```
 
@@ -129,34 +129,34 @@ Private Link. Configures RBAC policies on Cosmos account, configures network set
 
 Requires `--subscription` and `--resource-group`.
 
-```powershell
-go run . `
-  --configure-vnet `
-  --subscription "<SUBSCRIPTION_ID>" `
-  --resource-group "<RESOURCE_GROUP>" `
-  --workspace "<My Fabric Workspace>" `
-  --connection "<Fabric Connection Name>" `
-  --cosmos-endpoint "https://<cosmos-account-name>.documents.azure.com:443/" `
-  --database "<MyCosmosDatabase>" `
-  --mirror-name "<Database Mirror Artifact Name>"
-  --folder "Mirroring" `
+```bash
+go run . \
+  --configure-vnet \
+  --subscription "<SUBSCRIPTION_ID>" \
+  --resource-group "<RESOURCE_GROUP>" \
+  --workspace "<My Fabric Workspace>" \
+  --connection "<Fabric Connection Name>" \
+  --cosmos-endpoint "https://<cosmos-account-name>.documents.azure.com:443/" \
+  --database "<MyCosmosDatabase>" \
+  --mirror-name "<Database Mirror Artifact Name>" \
+  --folder "Mirroring" \
   --auto-discover
 ```
 
 ### Example 7: VNet setup — explicit principal ID
 
-```powershell
-go run . `
-  --configure-vnet `
-  --principal-id "YOUR_PRINCIPAL_OBJECT_ID" `
-  --subscription "<SUBSCRIPTION_ID>" `
-  --resource-group "<RESOURCE_GROUP>" `
-  --workspace "<My Fabric Workspace>" `
-  --connection "<Fabric Connection Name>" `
-  --cosmos-endpoint "https://<cosmos-account-name>.documents.azure.com:443/" `
-  --database "<MyCosmosDatabase>" `
-  --mirror-name "<Database Mirror Artifact Name>"
-  --folder "Mirroring" `
+```bash
+go run . \
+  --configure-vnet \
+  --principal-id "YOUR_PRINCIPAL_OBJECT_ID" \
+  --subscription "<SUBSCRIPTION_ID>" \
+  --resource-group "<RESOURCE_GROUP>" \
+  --workspace "<My Fabric Workspace>" \
+  --connection "<Fabric Connection Name>" \
+  --cosmos-endpoint "https://<cosmos-account-name>.documents.azure.com:443/" \
+  --database "<MyCosmosDatabase>" \
+  --mirror-name "<Database Mirror Artifact Name>" \
+  --folder "Mirroring" \
   --auto-discover
 ```
 

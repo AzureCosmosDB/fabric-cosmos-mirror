@@ -117,7 +117,7 @@ def configure_ip_firewall(credential, cosmos_client, subscription_id: str,
     """
     from azure.mgmt.cosmosdb.models import (
         DatabaseAccountUpdateParameters,
-        IPAddressOrRange,
+        IpAddressOrRange,
     )
 
     print("\n── Step 2: IP Firewall Configuration ────────────────────────────")
@@ -137,7 +137,7 @@ def configure_ip_firewall(credential, cosmos_client, subscription_id: str,
     for ip in fabric_ips:
         ip_set.add(ip)
 
-    merged_rules = [IPAddressOrRange(ip_address_or_range=ip) for ip in ip_set]
+    merged_rules = [IpAddressOrRange(ip_address_or_range=ip) for ip in ip_set]
 
     print(f"Existing IP rules: {len(state.ip_rules)}, "
           f"Fabric IPs: {len(fabric_ips)}, Merged total: {len(merged_rules)}")

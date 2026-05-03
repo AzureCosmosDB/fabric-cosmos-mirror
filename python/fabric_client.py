@@ -64,8 +64,8 @@ def lookup_workspace(token: str, name: str) -> str:
     resp = requests.get(url, headers=_auth_header(token))
     _check(resp, "List workspaces")
 
-    for ws in resp.json().get("value", []):
-        if ws.get("displayName", "").lower() == name.lower():
+    for ws in resp.json().get("value", []) or []:
+        if (ws.get("displayName") or "").lower() == name.lower():
             return ws["id"]
 
     print(f"ERROR: Workspace '{name}' not found", file=sys.stderr)
@@ -82,8 +82,8 @@ def lookup_connection(token: str, name: str) -> str:
     resp = requests.get(url, headers=_auth_header(token))
     _check(resp, "List connections")
 
-    for c in resp.json().get("value", []):
-        if c.get("displayName", "").lower() == name.lower():
+    for c in resp.json().get("value", []) or []:
+        if (c.get("displayName") or "").lower() == name.lower():
             return c["id"]
 
     print(f"ERROR: Connection '{name}' not found", file=sys.stderr)
@@ -103,8 +103,8 @@ def lookup_folder(token: str, workspace_id: str, name: str) -> str:
         _check(resp, "List folders")
         data = resp.json()
 
-        for f in data.get("value", []):
-            if f.get("displayName", "").lower() == name.lower():
+        for f in data.get("value", []) or []:
+            if (f.get("displayName") or "").lower() == name.lower():
                 return f["id"]
 
         page_url = data.get("continuationUri")

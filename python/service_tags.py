@@ -64,14 +64,14 @@ def extract_fabric_ips(tags: dict, location: str) -> list[str]:
     ips: list[str] = []
     found_data_factory = False
 
-    for entry in tags.get("values", []):
-        props = entry.get("properties", {})
-        system_service = props.get("systemService", "")
-        prefixes = props.get("addressPrefixes", [])
+    for entry in tags.get("values", []) or []:
+        props = entry.get("properties") or {}
+        system_service = props.get("systemService") or ""
+        prefixes = props.get("addressPrefixes") or []
 
         # DataFactory — match the regional tag (IPv4 only)
         if system_service.lower() == "datafactory":
-            tag_region = normalize_location(props.get("region", ""))
+            tag_region = normalize_location(props.get("region") or "")
             if tag_region == normalized_loc:
                 ipv4 = [p for p in prefixes if ":" not in p]
                 ips.extend(ipv4)
@@ -80,7 +80,7 @@ def extract_fabric_ips(tags: dict, location: str) -> list[str]:
                 found_data_factory = True
 
         # PowerQueryOnline — global IPv4 addresses
-        if entry.get("name", "").lower() == "powerqueryonline":
+        if (entry.get("name") or "").lower() == "powerqueryonline":
             ipv4 = [p for p in prefixes if ":" not in p]
             ips.extend(ipv4)
             print(f"Found PowerQueryOnline with {len(ipv4)} IPv4 prefixes")
@@ -88,9 +88,9 @@ def extract_fabric_ips(tags: dict, location: str) -> list[str]:
     if not found_data_factory:
         print(f"WARNING: No DataFactory service tag found for region '{location}'")
         print("Available DataFactory regions:")
-        for entry in tags.get("values", []):
-            props = entry.get("properties", {})
-            if props.get("systemService", "").lower() == "datafactory" and props.get("region"):
+        for entry in tags.get("values", []) or []:
+            props = entry.get("properties") or {}
+            if (props.get("systemService") or "").lower() == "datafactory" and props.get("region"):
                 print(f"  {entry.get('name')} (region: {props['region']})")
 
     print(f"Total Fabric IP prefixes: {len(ips)}")

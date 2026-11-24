@@ -117,6 +117,7 @@ def configure_ip_firewall(credential, cosmos_client, subscription_id: str,
     """
     from azure.mgmt.cosmosdb.models import (
         DatabaseAccountUpdateParameters,
+        DatabaseAccountUpdateProperties,
         IpAddressOrRange,
     )
 
@@ -144,8 +145,10 @@ def configure_ip_firewall(credential, cosmos_client, subscription_id: str,
 
     # Update account — enable public network access + merged IP rules
     params = DatabaseAccountUpdateParameters(
-        public_network_access="Enabled",
-        ip_rules=merged_rules,
+        properties=DatabaseAccountUpdateProperties(
+            public_network_access="Enabled",
+            ip_rules=merged_rules,
+        ),
     )
 
     print("Updating Cosmos DB IP firewall (this may take several minutes)...")

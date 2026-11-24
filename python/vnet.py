@@ -14,6 +14,7 @@ from typing import Any
 from azure.mgmt.cosmosdb import CosmosDBManagementClient
 from azure.mgmt.cosmosdb.models import (
     DatabaseAccountUpdateParameters,
+    DatabaseAccountUpdateProperties,
 )
 
 from auth import get_principal_object_id, get_tenant_id
@@ -43,17 +44,17 @@ def capture_account_state(cosmos_client: CosmosDBManagementClient,
     """Read the current Cosmos DB account networking configuration."""
     acct = cosmos_client.database_accounts.get(rg, account_name)
 
-    state = AccountState()
-    if acct.location:
-        state.location = acct.location
-    if acct.public_network_access:
-        state.public_network_access = acct.public_network_access
-    state.ip_rules = list(acct.ip_rules or [])
-    if acct.network_acl_bypass:
-        state.network_acl_bypass = acct.network_acl_bypass
-    state.network_acl_bypass_resource_ids = list(acct.network_acl_bypass_resource_ids or [])
-    state.capabilities = list(acct.capabilities or [])
-    return state
+    props = acct.properties
+    if props is None:
+        raise ValueError(f"Cannot capture network settings: {account_name} has no account properties")
+    return AccountState(
+        location=acct.location or "",
+        public_network_access=props.public_network_access,
+        ip_rules=list(props.ip_rules or []),
+        network_acl_bypass=props.network_acl_bypass,
+        network_acl_bypass_resource_ids=list(props.network_acl_bypass_resource_ids or []),
+        capabilities=list(props.capabilities or []),
+    )
 
 
 def restore_network_settings(cosmos_client: CosmosDBManagementClient,
@@ -67,8 +68,10 @@ def restore_network_settings(cosmos_client: CosmosDBManagementClient,
     print("\n── Step 5: Restoring network settings ───────────────────────────")
 
     params = DatabaseAccountUpdateParameters(
-        public_network_access=state.public_network_access,
-        ip_rules=state.ip_rules,
+        properties=DatabaseAccountUpdateProperties(
+            public_network_access=state.public_network_access,
+            ip_rules=state.ip_rules,
+        ),
     )
 
     print("Restoring PublicNetworkAccess and IP rules (this may take several minutes)...")

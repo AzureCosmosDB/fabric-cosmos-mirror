@@ -17,7 +17,7 @@ A Go CLI tool that automates the creation of [Microsoft Fabric Mirrored Database
 
 ## Prerequisites
 
-1. **Go 1.24+** — [Download](https://go.dev/dl/)
+1. **Go 1.26+** — [Download](https://go.dev/dl/)
 2. **Azure CLI** — [Install](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). Run `az login` before using the tool (required for DefaultAzureCredential and for `--configure-vnet`).
 3. **Fabric workspace role** — the signed-in identity needs **Contributor**, **Member**, or **Admin** role on the target Fabric workspace to create mirrored database items.
 4. **A Cosmos DB connection in the Fabric portal** — the Fabric REST API does not currently support creating OAuth2 connections programmatically. Create one manually via **Settings → Manage connections and gateways** in the Fabric portal and pass its display name via `--connection`. Creating a connection requires the user to have a **Fabric (Free or Pro) license** and permission to use cloud connections in the tenant (enabled by default; tenant admins can restrict this under **Tenant settings → Create cloud connections**).

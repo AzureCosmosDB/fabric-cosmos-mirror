@@ -11,6 +11,7 @@ import sys
 from azure.mgmt.cosmosdb.models import (
     Capability,
     DatabaseAccountUpdateParameters,
+    DatabaseAccountUpdateProperties,
 )
 
 FABRIC_NETWORK_ACL_BYPASS_CAPABILITY = "EnableFabricNetworkAclBypass"
@@ -56,8 +57,10 @@ def configure_network_acl_bypass(cosmos_client, rg: str, account_name: str,
 
     # 3d. Update the account
     params = DatabaseAccountUpdateParameters(
-        network_acl_bypass="AzureServices",
-        network_acl_bypass_resource_ids=merged_bypass_ids,
+        properties=DatabaseAccountUpdateProperties(
+            network_acl_bypass="AzureServices",
+            network_acl_bypass_resource_ids=merged_bypass_ids,
+        ),
     )
 
     print("Updating Network ACL Bypass (this may take several minutes)...")
@@ -81,7 +84,9 @@ def _enable_fabric_capability(cosmos_client, rg: str, account_name: str,
         Capability(name=FABRIC_NETWORK_ACL_BYPASS_CAPABILITY)
     ]
 
-    params = DatabaseAccountUpdateParameters(capabilities=caps)
+    params = DatabaseAccountUpdateParameters(
+        properties=DatabaseAccountUpdateProperties(capabilities=caps),
+    )
 
     print(f"Enabling capability '{FABRIC_NETWORK_ACL_BYPASS_CAPABILITY}' "
           f"(this may take several minutes)...")

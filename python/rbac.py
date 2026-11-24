@@ -13,7 +13,9 @@ from azure.core.exceptions import HttpResponseError
 from azure.mgmt.cosmosdb.models import (
     Permission,
     SqlRoleAssignmentCreateUpdateParameters,
+    SqlRoleAssignmentResource,
     SqlRoleDefinitionCreateUpdateParameters,
+    SqlRoleDefinitionResource,
     RoleDefinitionType,
 )
 
@@ -67,7 +69,7 @@ def _create_fabric_mirroring_role(cosmos_client, rg: str, account_name: str,
 
     # Check for an existing role with the same name (idempotent)
     for rd in cosmos_client.sql_resources.list_sql_role_definitions(rg, account_name):
-        if rd.role_name == FABRIC_MIRRORING_ROLE_NAME:
+        if rd.properties and rd.properties.role_name == FABRIC_MIRRORING_ROLE_NAME:
             print(f"Custom role '{FABRIC_MIRRORING_ROLE_NAME}' already exists: {rd.id}")
             return rd.id
 
@@ -78,15 +80,17 @@ def _create_fabric_mirroring_role(cosmos_client, rg: str, account_name: str,
     ))
 
     params = SqlRoleDefinitionCreateUpdateParameters(
-        role_name=FABRIC_MIRRORING_ROLE_NAME,
-        type=RoleDefinitionType.CUSTOM_ROLE,
-        assignable_scopes=[account_scope],
-        permissions=[
-            Permission(data_actions=[
-                "Microsoft.DocumentDB/databaseAccounts/readMetadata",
-                "Microsoft.DocumentDB/databaseAccounts/readAnalytics",
-            ])
-        ],
+        properties=SqlRoleDefinitionResource(
+            role_name=FABRIC_MIRRORING_ROLE_NAME,
+            type=RoleDefinitionType.CUSTOM_ROLE,
+            assignable_scopes=[account_scope],
+            permissions=[
+                Permission(data_actions=[
+                    "Microsoft.DocumentDB/databaseAccounts/readMetadata",
+                    "Microsoft.DocumentDB/databaseAccounts/readAnalytics",
+                ])
+            ],
+        ),
     )
 
     print(f"Creating custom role '{FABRIC_MIRRORING_ROLE_NAME}'...")
@@ -114,9 +118,11 @@ def _assign_cosmos_role(cosmos_client, rg: str, account_name: str,
     ))
 
     params = SqlRoleAssignmentCreateUpdateParameters(
-        role_definition_id=role_def_id,
-        principal_id=principal_id,
-        scope=scope,
+        properties=SqlRoleAssignmentResource(
+            role_definition_id=role_def_id,
+            principal_id=principal_id,
+            scope=scope,
+        ),
     )
 
     try:

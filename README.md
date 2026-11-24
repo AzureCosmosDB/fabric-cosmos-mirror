@@ -7,7 +7,7 @@ CLI tools that automate the creation of [Microsoft Fabric Mirrored Databases](ht
 The samples are available in the following languages:
 
 - [Go](go/README.md)
-- [Python](python/README.md) *(coming soon)*
+- [Python](python/README.md)
 - [C#](csharp/README.md) *(coming soon)*
 
 ## VS Code debugging (recommended)
